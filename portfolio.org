@@ -1,0 +1,104 @@
+* INVESTMENT TABLES
+
+** Asset table
+#+TBLNAME: assets
+| Investment | Value - ZAR | Purchase amt |  Gain | Gain % | TODO Value - GBP |
+|------------+-------------+--------------+-------+--------+------------------|
+| JSE        |      390677 |       373901 | 17497 |   4.68 |             9409 |
+| Credo      |      320245 |        16523 |   917 |   5.55 |            17640 |
+|------------+-------------+--------------+-------+--------+------------------|
+| TOTAL      |      710922 |              |       |   0.00 |            27049 |
+#+TBLFM: @2$2=remote(saequity,@II$11)/100;%0.0f::@2$3=remote(saequity,@II$10)/100;%0.0f::@2$4=remote(saequity,@II$12)/100;%0.0f::@2$5=remote(saequity,@II$13)::@3$2=remote(credo,@II$2);%0.0f::@3$3=remote(credo,@II$8);%0.0f::@3$4=remote(credo,@II$9);%0.0f::@3$5=remote(credo,@II$10)::@3$6=remote(credo,@II$11);%0.0f::@4$2=vsum(@I$2..@II$2)::@4$6=vsum(@I$6..@II$6)
+** South African equity
+   Table is mostly in South African cents
+#+TBLNAME: saequity
+| Stock          | Symbol | Mkt close ZAc | Amt. | Buy - ZAc | Date Bought      |   Fees | Dividends | Div Tax | Cost ZAc | Value ZAc | Net Gain ZAc | Yield % |
+|----------------+--------+---------------+------+-----------+------------------+--------+-----------+---------+----------+-----------+--------------+---------|
+| Adapt IT       | ADI    |           900 |  100 |       613 | <2017-12-14 Thu> |        |           |         |    61300 |     90000 |        28700 |   46.82 |
+| Famouns Brands | FBR    |         11329 |  100 |      9658 | <2017-12-14 Thu> |        |           |         |   965800 |   1132900 |       167100 |   17.30 |
+| Foschini       | TFG    |         17400 |  100 |     15812 | <2017-12-14 Thu> |        |     19500 |    3900 |  1581200 |   1740000 |       174400 |   11.03 |
+| Glencore       | GLN    |          6595 |  100 |      6361 |                  |        |     17997 |         |   636100 |    659500 |        41397 |    6.51 |
+| Naspers        | NPN    |        348500 |  100 |    334483 |                  |        |           |         | 33448300 |  34850000 |      1401700 |    4.19 |
+| Old Mutual     | OML    |          2779 |  100 |      3726 | <2017-12-14 Thu> |        |     29927 |    5985 |   372600 |    277900 |       -70758 |  -18.99 |
+| Zeder          | ZED    |           536 |  100 |       598 | <2017-12-14 Thu> |        |     18260 |    3652 |    59800 |     53600 |         8408 |   14.06 |
+| Quilter        | QUI    |          2638 |  100 |      2650 | <2018-06-25 Mon> |        |           |         |   265000 |    263800 |        -1200 |   -0.45 |
+|----------------+--------+---------------+------+-----------+------------------+--------+-----------+---------+----------+-----------+--------------+---------|
+| TOTAL          |        |             0 |      |         0 |                  | 159600 |     85684 |         | 37390100 |  39067700 |      1749747 |    4.68 |
+#+TBLFM: $10=$4*$5::$11=$4*$3::$12=$11-$10+$8-$9-$7::$13=($12/$10)*100;%0.2f::@4$12=@4$11-@4$10+@4$8-@4$9-@4$7::@5$12=@5$11-@5$10+@5$8-@5$9-@5$7::@7$12=@7$11-@7$10+@7$8-@7$9-@7$7::@8$12=@8$11-@8$10+@8$8-@8$9-@8$7::@10$7=17100*4+9120*10::@10$10=vsum(@2$10..@9$10)::@10$11=vsum(@2$11..@9$11);%0.0f::@10$12=vsum(@I$12..@9$12);%0.0f
+
+** Credo investments
+   Table is mostly based in GBP
+#+TBLNAME: credo
+| Investment     | Value - ZAR | Market Close | Amt. |    Buy | Fees | Dividends | Purchased @ | Gain | % Gain | Value - GBP |
+|----------------+-------------+--------------+------+--------+------+-----------+-------------+------+--------+-------------|
+| Cash - Dollars |        1380 |      0.75914 |  100 |        |      |           |           0 |      |        |          76 |
+| Global Equity  |      276293 |      152.190 |  100 | 140.65 |      |           |       14065 | 1154 |   8.20 |       15219 |
+| Japanese       |       42572 |       23.453 |  100 |  24.58 |      |      49.9 |        2458 |  -63 |  -2.56 |        2345 |
+|----------------+-------------+--------------+------+--------+------+-----------+-------------+------+--------+-------------|
+| TOTAL          |      320245 |     18.15450 |      |        |  250 |      49.9 |       16523 |  917 |   5.55 |       17640 |
+#+TBLFM: $2=vsum(@I$2..@II$2)::$8=$5*$4;%0.0f::@2$2=@2$11*@II$3;%0.0f::@2$3='(format "%0.5f" usd2gbp)::@2$11=@2$3*@2$4;%0.0f::@3$2=@3$11*@II$3;%0.0f::@3$9=@3$11-@3$8-@3$6+@3$7;%0.0f::@3$10=(@3$9/@3$8)*100;%0.2f::@3$11=@3$4*@3$3;%0.0f::@4$2=@II$3*@4$11;%0.0f::@4$7=0.499*@4$4::@4$9=@4$11-@4$8-@4$6+@4$7;%0.0f::@4$10=(@4$9/@4$8)*100;%0.2f::@4$11=@4$4*@4$3;%0.0f::@5$2=vsum(@I$2..@II$2);%0.0f::@5$3='(format "%0.5f" gbp2zar)::@5$6=250+vsum(@I$6..@II$6)::@5$7=vsum(@I$7..@4$7)::@5$8=vsum(@I$8..@II$8)::@5$9=@5$11-@5$8-@5$6+@5$7;%0.0f::@5$10=(@II$9/@II$8)*100;%0.2f::@5$11=vsum(@I$11..@II$11);%0.0f
+
+** Foreign exchange rate matrix
+#+TBLNAME: fx
+| From |     GBP-> |    USD-> |    ZAR-> |
+|------+-----------+----------+----------|
+| GBP  |         1 | 0.759140 | 0.055083 |
+| USD  |           |        1 |          |
+| ZAR  | 18.154495 |          |        1 |
+#+TBLFM: @2$3='(format "%0.6f" usd2gbp)::@2$4='(format "%0.6f" zar2gbp)::@4$2='(format "%0.6f" gbp2zar)
+
+
+* SUPPORT CODE
+** Call exchange rates
+#+BEGIN_SRC emacs-lisp
+(require 'request)
+(require 'json)
+(require 'cl)
+(request
+ "http://data.fixer.io/api/latest"
+ :params `(("access_key" . "0acd3b4df220839b570d914619f8dfd8")
+           ("symbols" . "USD\,GBP\,ZAR"))
+ :parser 'json-read
+ :success (function* 
+ (lambda (&key data &allow-other-keys)
+ (let-alist data
+ (let ((usd .rates.USD)
+ (zar .rates.ZAR)
+ (gbp .rates.GBP))
+ (setq gbp2zar (/ zar gbp))
+ (setq usd2gbp (/ gbp usd))
+ (setq zar2gbp (/ gbp zar)))
+ (org-table-iterate-buffer-table)))))
+ #+END_SRC
+
+#+RESULTS:
+: [cl-struct-request-response nil nil nil nil nil "http://data.fixer.io/api/latest?access_key=0acd3b4df220839b570d914619f8dfd8&symbols=USD%2CGBP%2CZAR" nil (:params (("access_key" . "0acd3b4df220839b570d914619f8dfd8") ("symbols" . "USD,GBP,ZAR")) :parser json-read :success (lambda (&rest --cl-rest--) "
+: 
+: (fn &key DATA &allow-other-keys)" (let* ((data (car (cdr (plist-member --cl-rest-- (quote :data)))))) (let-alist data (let ((usd \.rates\.USD) (zar \.rates\.ZAR) (gbp \.rates\.GBP)) (setq gbp2zar (/ zar gbp)) (setq usd2gbp (/ gbp usd)) (setq zar2gbp (/ gbp zar))) (org-table-iterate-buffer-table)))) :error #[128 "\302\300\303\301\"\"\207" [request-default-error-callback ("http://data.fixer.io/api/latest") apply append] 6 "
+: 
+: (fn &rest ARGS2)"] :url "http://data.fixer.io/api/latest?access_key=0acd3b4df220839b570d914619f8dfd8&symbols=USD%2CGBP%2CZAR" :response #0) #<buffer  *request curl*> nil nil curl nil]
+
+
+
+
+
+
+** Call saequity quotes
+(require 'request)
+(require 'json)
+(require 'cl)
+(request
+ "http://finance.yahoo.com/api/latest"
+ :params `(("access_key" . "0acd3b4df220839b570d914619f8dfd8")
+           ("symbols" . "USD\,GBP\,ZAR"))
+ :parser 'json-read
+ :success (function* 
+ (lambda (&key data &allow-other-keys)
+ (let-alist data
+ (let ((usd .rates.USD)
+ (zar .rates.ZAR)
+ (gbp .rates.GBP))
+ (setq gbp2zar (/ zar gbp))
+ (setq usd2gbp (/ gbp usd))
+ (setq zar2gbp (/ gbp zar)))
+ (org-table-iterate-buffer-table)))))
