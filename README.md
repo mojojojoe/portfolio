@@ -1,4 +1,4 @@
-# org-mode portfolio calculations
+# org-mode stock market portfolio and calculations
 
 This is an org file intended for use with the Emacs text editor.
 It calculates an investment portfolio's latest value in GBP and ZAR.
