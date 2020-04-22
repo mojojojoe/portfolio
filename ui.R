@@ -24,10 +24,8 @@ shinyUI(
             ),
             mainPanel(
                 tabsetPanel(
-                    tabPanel("Dashboard"),
-                    tabPanel("Performance overall"),
-                    tabPanel("USD performances"),
-                    tabPanel("GBP performances"),
+                    tabPanel("Dashboard",verbatimTextOutput("dashboard")),
+                    tabPanel("Performance"),
                     tabPanel("Measures",tableOutput("measure_StockReturn")),
                     tabPanel("Dataset",tableOutput("data_StockIdx"))
                     )
