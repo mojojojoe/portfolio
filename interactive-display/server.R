@@ -17,11 +17,10 @@ shinyServer(function(input, output) {
      Made up of equity:    R1 196 499
               and cash:       R17 074")
 
-    output$data_StockIdx <- renderDataTable(StockIndex)
-#    output$measure_StockReturn <-
- #       na.omit(timeSeries(returnseries(StockIndex,
-  #                                      method = "discrete"),
-   #                        charvec = rownames(StockIndex)))
-    
-    
-})
+    output$data_StockIdx <- renderTable(StockIndex)
+    output$measure_StockReturn <- 
+      renderTable(na.omit(timeSeries(returnseries(StockIndex,
+                                                  method = "discrete"), 
+                                     charvec = rownames(StockIndex))))
+  }
+)
