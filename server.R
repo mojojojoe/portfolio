@@ -14,38 +14,48 @@ library(FRAPO)
 shinyServer(function(input, output) {
     
   
-  output$default <- renderText( 
-    "The initial investment was R1 213 573
-     Made up of equity:    R1 196 499
-              and cash:       R17 074")
+  output$textbox1 <- renderText( 
+    "     The initial investment was R1 213 573
+             Made up of equity: R1 196 499
+                      and cash:    R17 074")
 
-
-  output$data_StockIdx <- renderTable(StockIndex)
+  output$textbox2 <- renderText( 
+    "The investment today is worth   R1 213 573
+             Made up of equity: R1 196 499
+                      and cash:    R17 074")
+  
+  output$textbox3 <- renderText( 
+    "In US dollar,
+The investment today is worth   R1 213 573
+             Made up of equity: R1 196 499
+                      and cash:    R17 074")
+  
+  
+  
+  output$data_StockIdx <- renderTable(na.omit(KOMP))
 
   
   output$measure_StockReturn <- 
-      renderTable(na.omit(timeSeries(returnseries(StockIndex,
-                                                  method = "discrete"), 
-                                     charvec = rownames(StockIndex))))
-
+      renderTable(na.omit(VJPN.L))
+                                                
   
   output$dashboard <- renderText("
                         Time frame dd-mmm-yyyy to dd-mm-yyyy      
                                 Invested over x days
 
-     Value in:                                                         Valuations:
+     Value in:                                                        Valuations:
        USD                                                              KOMP:US
        GBP                                                              VJPN:LN
        ZAR                                                              USD  
                                                                         GBP    
 
-     Gain/Loss:                                                       Purchased:          date
-       USD                                                              KOMP:US
-       GBP                                                              VJPN:LN
-       ZAR                                                              USD
-                                                                        GBP           
-     Performance:
-       USD
+     Gain/Loss:                                                       Purchased:    at      on
+       USD                                                              KOMP:US     34.0    20-10-2020
+       GBP                                                              VJPN:LN     24.0    20-10-2020
+       ZAR                                                              USD         14.54   20-10-2020
+                                                                        GBP         16.50   20-10-2020
+     Performance:                                                   
+       USD                                                            Present term of investment is 0.444 years  
        GBP
        ZAR
        ")
