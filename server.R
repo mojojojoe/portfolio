@@ -13,53 +13,55 @@ library(FRAPO)
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
     
-  
   output$textbox1 <- renderText( 
     "     The initial investment was R1 213 573
              Made up of equity: R1 196 499
                       and cash:    R17 074")
 
   output$textbox2 <- renderText( 
-    "The investment today is worth   R1 213 573
+    "  The investment today is worth R1 213 573
              Made up of equity: R1 196 499
                       and cash:    R17 074")
   
-  output$textbox3 <- renderText( 
+  output$textbox3 <- renderText({ 
     "In US dollar,
-The investment today is worth   R1 213 573
-             Made up of equity: R1 196 499
-                      and cash:    R17 074")
+ The investment today is worth" ;  getDaysWorth(Today);"
+             Made up of equity: "; getDaysEquityWorth(Today);"
+                      and cash:    ";getDaysCashWorth(Today);})
   
   
-  
-  output$data_StockIdx <- renderTable(na.omit(KOMP))
+  output$komp <- renderTable(na.omit(KOMP))
 
+  output$vjpn <- renderTable(na.omit(VJPN.L))
   
-  output$measure_StockReturn <- 
-      renderTable(na.omit(VJPN.L))
-                                                
-  
-  output$dashboard <- renderText("
-                        Time frame dd-mmm-yyyy to dd-mm-yyyy      
-                                Invested over x days
+  output$startdt <- renderText({})
+
+  output$dashboard <- renderText({
+
+    paste("                                    Invested over", 
+    paste(as.double(difftime(input$TimeWindow[2],input$TimeWindow[1]),
+                       units = "days"),
+    paste("days
 
      Value in:                                                        Valuations:
        USD                                                              KOMP:US
        GBP                                                              VJPN:LN
-       ZAR                                                              USD  
-                                                                        GBP    
+       ZAR                                                              USD
+                                                                        GBP
 
-     Gain/Loss:                                                       Purchased:    at      on
+     Gains/Losses:                                                    Purchased:    at      on
        USD                                                              KOMP:US     34.0    20-10-2020
-       GBP                                                              VJPN:LN     24.0    20-10-2020
-       ZAR                                                              USD         14.54   20-10-2020
-                                                                        GBP         16.50   20-10-2020
-     Performance:                                                   
-       USD                                                            Present term of investment is 0.444 years  
+       ZAR                                                              VJPN:LN     24.0    20-10-2020
+       GBP                                                              USD         14.54   20-10-2020
+     Total Gain/(Loss) in USD                                           GBP         16.50   20-10-2020
+
+     Performance:
+       USD                                                            Present term of investment is", paste(as.double(difftime(input$TimeWindow[2],input$TimeWindow[1]),
+                                                                                                                      units = "days")/365), paste("years
        GBP
        ZAR
-       ")
-  
+       "))))})
+
 
   }
 )

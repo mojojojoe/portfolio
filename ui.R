@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+library(lubridate)
 
 # Define UI for application that draws a histogram
 shinyUI(
@@ -19,17 +20,17 @@ shinyUI(
         # Sidebar with a slider input for number of bins
         sidebarLayout(
             sidebarPanel(
-                dateRangeInput("tFrame", "Performance timeframe", format = "dd-mm-yyyy", start = "20-10-2019", startview = "year" , language = "en", separator = " to ", autoclose = TRUE),
+              br(),
+                dateRangeInput("TimeWindow", h3("Synopsis"), format = "dd-mm-yyyy", start = "2019-10-20", end=lubridate::today(), startview = "year" , language = "en", separator = " to ", autoclose = TRUE),
                 verbatimTextOutput("textbox1"),
                 verbatimTextOutput("textbox2"),
                 verbatimTextOutput("textbox3")
                 ),
             mainPanel(
                 tabsetPanel(
-                    tabPanel("Dashboard",verbatimTextOutput("dashboard")),
-                    tabPanel("Performance"),
-                    tabPanel("Measures",tableOutput("measure_StockReturn")),
-                    tabPanel("Dataset",tableOutput("data_StockIdx"))
+                    tabPanel("Dashboard",verbatimTextOutput("startdt"), verbatimTextOutput("dashboard")),
+                    tabPanel("Kenshoo 4th IR",tableOutput("komp")),
+                    tabPanel("Japan",tableOutput("vjpn"))
                     )
                 )
             )
