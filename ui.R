@@ -21,16 +21,25 @@ shinyUI(
         sidebarLayout(
             sidebarPanel(
               br(),
-                dateRangeInput("TimeWindow", h3("Synopsis"), format = "dd-mm-yyyy", start = "2019-10-20", end=lubridate::today(), startview = "year" , language = "en", separator = " to ", autoclose = TRUE),
+              br(),
+                dateRangeInput("TimeWindow", "Investment window", format = "yyyy--mm-dd", start = "2019-10-20", end=lubridate::today(), startview = "year" , language = "en", separator = " to ", autoclose = TRUE),
                 verbatimTextOutput("textbox1"),
                 verbatimTextOutput("textbox2"),
                 verbatimTextOutput("textbox3")
                 ),
             mainPanel(
                 tabsetPanel(
-                    tabPanel("Dashboard",verbatimTextOutput("startdt"), verbatimTextOutput("dashboard")),
-                    tabPanel("Kenshoo 4th IR",tableOutput("komp")),
-                    tabPanel("Japan",tableOutput("vjpn"))
+                    tabPanel("Synopsis",
+                             verbatimTextOutput("dashboard")),
+                    tabPanel("Kenshoo 4th IR fund",
+                             plotOutput("komp")),
+                    tabPanel("Japanese Vanguard",
+                             plotOutput("vjpn")),
+                    tabPanel("ZARGBP",
+                             plotOutput("gbp")),
+                    tabPanel("ZARUSD",
+                             plotOutput("usd"))
+                    
                     )
                 )
             )

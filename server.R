@@ -14,32 +14,27 @@ library(FRAPO)
 shinyServer(function(input, output) {
     
   output$textbox1 <- renderText( 
-    "     The initial investment was R1 213 573
-             Made up of equity: R1 196 499
-                      and cash:    R17 074")
+    "     The initial investment was R1 213 573")
 
   output$textbox2 <- renderText( 
-    "  The investment today is worth R1 213 573
-             Made up of equity: R1 196 499
-                      and cash:    R17 074")
+    "  The investment today is worth R1 213 573")
   
   output$textbox3 <- renderText({ 
-    "In US dollar,
- The investment today is worth" ;  getDaysWorth(Today);"
-             Made up of equity: "; getDaysEquityWorth(Today);"
-                      and cash:    ";getDaysCashWorth(Today);})
+    paste("                  In US dollar,\nThe investment today is worth", 
+    paste("umm"))})
+    
   
   
   output$komp <- renderTable(na.omit(KOMP))
 
   output$vjpn <- renderTable(na.omit(VJPN.L))
   
-  output$startdt <- renderText({})
+  output$startdt <- renderText({input$TimeWindow[1]})
 
   output$dashboard <- renderText({
 
     paste("                                    Invested over", 
-    paste(as.double(difftime(input$TimeWindow[2],input$TimeWindow[1]),
+    paste(print(difftime(input$TimeWindow[2],input$TimeWindow[1]),
                        units = "days"),
     paste("days
 
@@ -56,11 +51,11 @@ shinyServer(function(input, output) {
      Total Gain/(Loss) in USD                                           GBP         16.50   20-10-2020
 
      Performance:
-       USD                                                            Present term of investment is", paste(as.double(difftime(input$TimeWindow[2],input$TimeWindow[1]),
-                                                                                                                      units = "days")/365), paste("years
+       USD                                                            Present term of investment is", paste(format(round(as.double(difftime(input$TimeWindow[2],input$TimeWindow[1]),
+                                                                                                        units = "days")/365, 3), nsmall = 3), paste("years
        GBP
        ZAR
-       "))))})
+       ")))))})
 
 
   }
