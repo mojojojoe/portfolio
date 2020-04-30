@@ -18,17 +18,8 @@ shinyUI(
         titlePanel("Portfolio information"),
 
         # Sidebar with a slider input for number of bins
-        sidebarLayout(
-            sidebarPanel(
-              br(),
-              br(),
-                dateRangeInput("TimeWindow", "Investment window", format = "yyyy--mm-dd", start = "2019-10-20", end=lubridate::today(), startview = "year" , language = "en", separator = " to ", autoclose = TRUE),
-                verbatimTextOutput("textbox1"),
-                verbatimTextOutput("textbox2"),
-                verbatimTextOutput("textbox3")
-                ),
-            mainPanel(
-                tabsetPanel(
+        verticalLayout(
+            tabsetPanel(
                     tabPanel("Synopsis",
                              verbatimTextOutput("dashboard")),
                     tabPanel("Kenshoo 4th IR fund",
@@ -39,9 +30,8 @@ shinyUI(
                              plotOutput("gbp")),
                     tabPanel("ZARUSD",
                              plotOutput("usd"))
-                    
                     )
-                )
             )
         )
     )
+    

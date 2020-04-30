@@ -8,14 +8,14 @@
 #
 
 library(shiny)
-library(FRAPO)
+
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-    
+  
   output$textbox1 <- renderText( 
     "     The initial investment was R1 213 573")
-
+  
   output$textbox2 <- renderText( 
     "  The investment today is worth R1 213 573")
   
@@ -25,9 +25,13 @@ shinyServer(function(input, output) {
     
   
   
-  output$komp <- renderTable(na.omit(KOMP))
+  output$komp <- renderPlot(plot(na.omit(KOMP$KOMP.Close)))
 
-  output$vjpn <- renderTable(na.omit(VJPN.L))
+  output$vjpn <- renderPlot(plot(na.omit(VJPN.L$VJPN.L.Close)))
+  
+  output$gbp <- renderPlot(plot(na.omit(`GBPZAR=X`$`GBPZAR=X.Close`)))
+  
+  output$usd <- renderPlot(plot(na.omit(`ZAR=X`$`ZAR=X.Close`)))
   
   output$startdt <- renderText({input$TimeWindow[1]})
 
@@ -60,3 +64,4 @@ shinyServer(function(input, output) {
 
   }
 )
+
