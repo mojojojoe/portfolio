@@ -13,32 +13,33 @@ library(shiny)
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
-  output$textbox1 <- renderText( 
-    "     The initial investment was R1 213 573")
-  
-  output$textbox2 <- renderText( 
-    "  The investment today is worth R1 213 573")
-  
-  output$textbox3 <- renderText({ 
-    paste("                  In US dollar,\nThe investment today is worth", 
-    paste("umm"))})
+  output$inv.us.zar <- renderPlot({
+    plot(na.omit(investments.us$zar))  
+  })
+
+  output$inv.us.usd <- renderPlot({
+    plot(na.omit(investments.us$usd))
+  })
+
+    output$inv.uk.gbp <- renderPlot({
+    plot(na.omit(investments.uk$gbp))
+  })
     
+  output$inv.uk.zar <- renderPlot({
+    plot.xts(na.omit(investments.uk$zar))
+  })
   
+  plot.ts
+  output$vjpn <- renderPlot(plot(na.omit(vjpn$close)))
   
-  output$komp <- renderPlot(plot(na.omit(KOMP$KOMP.Close)))
-
-  output$vjpn <- renderPlot(plot(na.omit(VJPN.L$VJPN.L.Close)))
+  output$gbp <- renderPlot(plot(na.omit(gbp$close)))
   
-  output$gbp <- renderPlot(plot(na.omit(`GBPZAR=X`$`GBPZAR=X.Close`)))
+  output$usd <- renderPlot(plot(na.omit(usd$close)))
   
-  output$usd <- renderPlot(plot(na.omit(`ZAR=X`$`ZAR=X.Close`)))
-  
-  output$startdt <- renderText({input$TimeWindow[1]})
-
   output$dashboard <- renderText({
 
     paste("                                    Invested over", 
-    paste(print(difftime(input$TimeWindow[2],input$TimeWindow[1]),
+    paste(print(difftime(input$window[2],input$window[1]),
                        units = "days"),
     paste("days
 
@@ -55,7 +56,7 @@ shinyServer(function(input, output) {
      Total Gain/(Loss) in USD                                           GBP         16.50   20-10-2020
 
      Performance:
-       USD                                                            Present term of investment is", paste(format(round(as.double(difftime(input$TimeWindow[2],input$TimeWindow[1]),
+       USD                                                            Present term of investment is", paste(format(round(as.double(difftime(input$window[1],input$window[2]),
                                                                                                         units = "days")/365, 3), nsmall = 3), paste("years
        GBP
        ZAR
