@@ -9,7 +9,7 @@
 
 library(shiny)
 library(tidyquant)
-library(ggplot2)
+
 # Define UI for application that draws a histogram
 shinyUI(
     fluidPage(
@@ -23,16 +23,17 @@ shinyUI(
                     tabPanel("Synopsis",
                              dateRangeInput("window","Investment Time Frame", start = "2018-10-20", end = TODAY()),
                              verbatimTextOutput("dashboard")),
-                    tabPanel("Kenshoo 4th IR fund",
-                             plotOutput("inv.us.zar"),
-                             plotOutput("inv.us.usd")),
-                    tabPanel("Japanese Vanguard",
-                             plotOutput("inv.uk.zar"),
-                             plotOutput("inv.uk.gbp")),
-                    tabPanel("ZARGBP",
-                             plotOutput("gbp")),
-                    tabPanel("ZARUSD",
-                             plotOutput("usd"))
+                    tabPanel("Charts - USD",
+                             plotOutput("j"),
+                             plotOutput("k"),
+                             plotOutput("p.usd"))
+                    # tabPanel("Japanese Vanguard",
+                    #          plotOutput("inv.uk.zar"),
+                    #          plotOutput("inv.uk.gbp")),
+                    # tabPanel("ZARGBP",
+                    #          plotOutput("gbp")),
+                    # tabPanel("ZARUSD",
+                    #          plotOutput("usd"))
                     )
             )
         )

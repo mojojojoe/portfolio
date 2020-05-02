@@ -8,61 +8,43 @@
 #
 
 library(shiny)
-
+library(ggplot2)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
-  output$inv.us.zar <- renderPlot({
-    plot(na.omit(investments.us$zar))  
-  })
-
-  output$inv.us.usd <- renderPlot({
-    plot(na.omit(investments.us$usd))
-  })
-
-    output$inv.uk.gbp <- renderPlot({
-    plot(na.omit(investments.uk$gbp))
-  })
-    
-  output$inv.uk.zar <- renderPlot({
-    plot.xts(na.omit(investments.uk$zar))
-  })
-  
-  plot.ts
-  output$vjpn <- renderPlot(plot(na.omit(vjpn$close)))
-  
-  output$gbp <- renderPlot(plot(na.omit(gbp$close)))
-  
-  output$usd <- renderPlot(plot(na.omit(usd$close)))
-  
-  output$dashboard <- renderText({
-
-    paste("                                    Invested over", 
-    paste(print(difftime(input$window[2],input$window[1]),
-                       units = "days"),
-    paste("days
-
-     Value in:                                                        Valuations:
-       USD                                                              KOMP:US
-       GBP                                                              VJPN:LN
-       ZAR                                                              USD
-                                                                        GBP
-
-     Gains/Losses:                                                    Purchased:    at      on
-       USD                                                              KOMP:US     34.0    20-10-2020
-       ZAR                                                              VJPN:LN     24.0    20-10-2020
-       GBP                                                              USD         14.54   20-10-2020
-     Total Gain/(Loss) in USD                                           GBP         16.50   20-10-2020
-
-     Performance:
-       USD                                                            Present term of investment is", paste(format(round(as.double(difftime(input$window[1],input$window[2]),
-                                                                                                        units = "days")/365, 3), nsmall = 3), paste("years
-       GBP
-       ZAR
-       ")))))})
+  output$j <- renderPlot({ggplot(VJPN.L, aes(x=Index, y=close)) + geom_candlestick(aes(open=open,high=high,low=low,close=close)) + geom_ma(color = "black")})
+  output$k <- renderPlot({ggplot(KOMP, aes(x=Index, y=close)) + geom_candlestick(aes(open=open,high=high,low=low,close=close)) + geom_ma(color = "black")})
+  output$p.usd <- renderPlot({ggplot(portfolio.usd, aes(x=Index,y=komp.close)) + geom_line()})
 
 
+
+  # output$dashboard <- renderText({
+  # 
+  #   paste("Invested over", 
+  #   paste(print(difftime(input$window[2],input$window[1]),units = "days"),
+  #   paste("days or", 
+  #   paste(print(difftime(input$window[2],input$window[1]),units = "days")/365, 
+  #   paste("years
+  # 
+  #    Today's value:                                                       
+  #      USD                                                              
+  #                                                                       
+  # 
+  #    Gains/Losses:                                                    
+  #      1d
+  #      7d
+  #      14d
+  #      1m
+  #      3m
+  #      6m
+  #      1y
+  #      2y
+  #      3y
+  #      5y
+  #      from DOI
+  #      dince inception 
+  #      YTD")))))
   }
 )
 
