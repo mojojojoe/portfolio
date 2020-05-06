@@ -24,9 +24,9 @@ shinyUI(
                              dateRangeInput("window","Investment Time Frame", start = "2018-10-20", end = TODAY()),
                              verbatimTextOutput("dashboard")),
                     tabPanel("Charts - USD",
-                             plotOutput("j"),
-                             plotOutput("k"),
-                             plotOutput("p.usd"))
+                             plotOutput("one"),
+                             plotOutput("two"),
+                             plotOutput("three"))
                     # tabPanel("Japanese Vanguard",
                     #          plotOutput("inv.uk.zar"),
                     #          plotOutput("inv.uk.gbp")),
