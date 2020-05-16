@@ -10,7 +10,7 @@
 library(shiny)
 library(tidyquant)
 
-# Define UI for application that draws a histogram
+# Define UI for application
 shinyUI(
     fluidPage(
 
@@ -26,14 +26,8 @@ shinyUI(
                     tabPanel("Charts - USD",
                              plotOutput("one"),
                              plotOutput("two"),
-                             plotOutput("three"))
-                    # tabPanel("Japanese Vanguard",
-                    #          plotOutput("inv.uk.zar"),
-                    #          plotOutput("inv.uk.gbp")),
-                    # tabPanel("ZARGBP",
-                    #          plotOutput("gbp")),
-                    # tabPanel("ZARUSD",
-                    #          plotOutput("usd"))
+                             plotOutput("thr"),
+                             plotOutput("fou"))
                     )
             )
         )

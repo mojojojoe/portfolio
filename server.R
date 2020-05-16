@@ -9,48 +9,24 @@
 
 library(shiny)
 library(ggplot2)
-MY.ENV = new.env(parent = .BaseNamespaceEnv)
-attach(MY.ENV)
-source("get_my_tickers.R")
-detach(MY.ENV)
+#source("get_my_tickers.R")
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
-
   output$one <- renderPlot({ggplot(priceDfList[[1]], aes(x=Index, y=close)) + geom_line() + geom_ma(color = "black")})
-  output$two <- renderPlot({ggplot(priceDfList[[2]], aes(x=Index, y=close)) + geom_candlestick(aes(open=open,high=high,low=low,close=close)) + geom_ma(color = "black")})
+  output$two <- renderPlot({ggplot(priceDfList[[1]], aes(x=Index, y=close)) + geom_candlestick(aes(open=open,high=high,low=low,close=close)) + geom_ma(color = "black")})
   output$thr <- renderPlot({ggplot(priceDfList[[2]], aes(x=Index, y=close)) + geom_line() + geom_ma(color = "black")})
-
-
-
+  output$fou <- renderPlot({ggplot(priceDfList[[2]], aes(x=Index, y=close)) + geom_candlestick(aes(open=open,high=high,low=low,close=close)) + geom_ma(color = "black")})
+  
   output$dashboard <- renderText({
-
-     timeWndw <- difftime(input$window[2],input$window[1],units = "days")
+    
+    timeWndw <- difftime(input$window[2],input$window[1],units = "days")
+    
     paste("Invested over",
     paste(timeWndw,
     paste("days or",
-    timeWndw/365)))})
-    # paste("years
-    # 
-    #  Today's value:
-    #    USD
-    # 
-    # 
-    #  Gains/Losses:
-    #    1d
-    #    7d
-    #    14d
-    #    1m
-    #    3m
-    #    6m
-    #    1y
-    #    2y
-    #    3y
-    #    5y
-    #    from DOI
-    #    dince inception
-    #    YTD")))))
-  }
-)
-
+    timeWndw/365)))
+    })
+})
+  
