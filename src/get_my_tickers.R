@@ -3,17 +3,17 @@
 # Ticker strings, and between startDt and Today()  #
 ####################################################
 library(tidyquant)
-
+read_excel("~/Downloads/KOMP_All_Holdings.xls")
+tickers<-readxl::read_xls("/home/rstudio/portfolio/resources/KOMP_All_Holdings.xls",sheet='KOMP_All_Holdings',range = "B4:B55")
+tickers<-as.list(tickers)
 # for the moment just assume that it is all in USD...
-tickers<-c("KOMP","VJPN.L","TSLA","AAPL")
+
 # ticker.symbols<-lapply(tickers,as.symbol)
 
 startDt <- '2018-10-01'
-
-# GBPxUSD <- getSymbols("GBPUSD=X",auto.assign=FALSE,from=startDt,to=TODAY())
 
 get.price.list <- function(x){
   getSymbols(x,auto.assign=FALSE,from=startDt,to=TODAY())
 }
 
-price.lists <- lapply(tickers,get.price.list)
+price.lists <- lapply(tickers[[1]],get.price.list)
