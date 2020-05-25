@@ -1,6 +1,6 @@
 # get price.lists, a list of xts objects of price information on stocks
 
-source("get_my_tickers.R")
+source("../src/get_my_tickers.R")
 
 library(tsbox)
 
