@@ -1,4 +1,4 @@
-agitlibrary(quantmod)
+library(quantmod)
 library(FRAPO)
 library(fPortfolio)
 ####################################################
