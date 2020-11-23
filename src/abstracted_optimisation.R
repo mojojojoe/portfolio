@@ -1,8 +1,6 @@
-library(quantmod)
+agitlibrary(quantmod)
 library(FRAPO)
 library(fPortfolio)
-#library(tidyquant)
-
 ####################################################
 # returns a list of xts objects based on a list of #
 # Ticker strings                                   #
@@ -11,151 +9,96 @@ library(fPortfolio)
 # tickers<-readxl::read_xls("C:\\Users\\bruce\\dev\\portfolio\\resources\\KOMP_All_Holdings.xls",sheet='KOMP_All_Holdings',range = "B5:B14",col_types = "text",col_names=FALSE,trim_ws = TRUE)
 # tickers<-tickers$...1
 
-
-
-# Ray Dalio's portfolio
 # The beta balanced portfolio is divided into 3 parts
-# 1.Growth stocks
+
+#   1.Growth stocks
 #   1a. Developed market equity
 #   1b. Small cap
 #   1c. Emerging market equity
 #   1d. REITS
-# 2.Diversification and deflation hedging sovereign bonds
+
+#   2.Diversification and deflation hedging sovereign bonds
 #   2a. Develped market long duration ZCBs
 #   2b. Synthetic using futures
-# 3.Real assets for inflation hedging
+
+#   3.Real assets for inflation hedging
 #   3a. TIPS
 #   3b. Diversified commodoties
 
+###########################
+# Define  portfolios
+###########################
+notickers <- c("IBTL.L","DJEU.L","TIPH.L")
 tickers<- c("SPY","GLD","IVV","VWO","IAU","BABA","FXI","MCHI","VEA",
-            "EFA","LQD","IEFA","IEMG","JD","NTES","PDD","EWT","EEM","BIDU","TAL")
+#            "EFA","LQD","IEFA","IEMG","JD","NTES","PDD","EWT","EEM","BIDU","TAL")
+tickers <- c("IBTL.L","TIPH.L","UNIC.L","DJEU.L","SX5S.L","CRB.SW")
 
-#  get the historical figures
+#  download the historical figures
+# TODO: only download a ticker if it is not already loaded into the environment
 quantmod::getSymbols(tickers)
 
-# get the returns from the across the list of symbol's historical prices
-return.listings<-lapply(tickers,function(tick){
-  t = eval(as.symbol(tick))
-  quantmod::monthlyReturn(t,type = "log")})
+###########################
+#
+# load the returns and prices data
+#
+###########################
 
-logret.mthly <- na.omit(Reduce(f = merge.xts,return.listings))
-colnames(logret.mthly)<-tickers
-
-################################
-ret.mth.first <-coredata(first(ret.mthly.log));ret.mth.first
-ret.mth.last<-coredata(last(ret.mthly.log));ret.mth.last
-num.ret.mthly<-NROW(ret.mthly.log)
-barplot((ret.mth.last/ret.mth.first)^(1/num.ret.mthly)-1)
-
-ret.mthly.avg<-(ret.mth.last/ret.mth.first)^(1/num.ret.mthly)-1;ret.mthly.avg
-invert.num.ret.mthly <- 1/num.ret.mthly
-invert.num.ret.mthly
-ret.mth.last
-(ret.mth.last/ret.mth.first)^invert.num.ret.mthly
-barplot(ret.mthly.avg)
-
-ret.mthly.cum<-(ret.first/ret.last)-1;ret.mthly.cum
-barplot(ret.mthly.cum)
-
-plot(ret)
+source('~/dev/portfolio/src/returns.R')
 
 
-# do the same annually
-# work on geometric returns
-# extract cumulative and average returns
-# plot them
-
-ret.annual.list <-lapply(tickers,function(tick){
-  t = eval(as.symbol(tick))
-  annualReturn(t,type = "log")})
-
-ret.annual.log <- na.omit(Reduce(f = merge.xts, ret.annual.list))
-ret.annual.log
-retMatrix <- as.matrix(ret.annual.log) # matrify xts objects
-
-# intermediate values
-colnames(ret.annual.log)<-tickers
-ret.annual.log
-ret.annual.first<-coredata(first(ret.annual))
-ret.annual.last<-coredata(last(ret.annual))
-inv.nrow.ret.annual <- 1/NROW(ret.annual.log)
-
-# interesting return measurements
-returns.avg<-((ret.annual.last/ret.annual.first)^inv.nrow.ret.annual)-1;returns.avg
-returns.cum<-(ret.annual.last/ret.annual.first)-1;returns.cum
-
-
-
-# give the column their respective names
-colnames(ret)<-tickers
-
-colnames(retMatrix)<-tickers
-
-# prepare for the optimisation, (get a covariance matrix)
-sig <- cov(ret)
 
 ###################################
-#                                 # 
-# Optimize the portfolio          #
-#                                 #
+#            
+#  Optimize the portfolio 
+#
 ###################################
 
 
 # Mean-Variance optimized portfolio
-MVBalanced<-fPortfolio::tangencyPortfolio(data = as.timeSeries(logret.mthly),constraints = 'maxW[1:2]=1')
+MinVarBalanced<-FRAPO::PGMV(Returns=logret.mthly,percentage = TRUE)
+
 # Equal risk optimized portfolio
-sig <- cov(logret.mthly)
 ERBalanced<-FRAPO::PERC(Sigma = sig)
 
-
-MVBalanced@spec@portfolio$targetReturn
-MVBalanced@spec@portfolio$targetRisk
-MVBalanced@spec@portfolio$riskFreeRate
-MVBalanced@spec@portfolio$status
-barplot(MVBalanced@portfolio@portfolio$covRiskBudgets)
-heatmap(retMatrix)
-sum(MVBalanced@portfolio@portfolio$weights)
-barplot(logret.mthly)
-ERBalanced@weights
+# Minimum conditional drawdown at risk
+CDaRBalanced<- FRAPO::PCDaR(PriceData = prices.mthly.nona.ts, softBudget = TRUE)
+barplot(tp@portfolio@portfolio$covRiskBudgets)
 
 
 
-# convert the MV portfolio weights
-
-
-##################################
-# 
-# Section on the Kelly Criterion
+###########################
 #
-##################################
-# Daily returns
-return.listings.day<-lapply(tickers,function(tick){
-  t = eval(as.symbol(tick))
-  dailyReturn(t,type = "log")})
+# Play with the FRAPO objects
+#
+###########################
 
-logret.daily <- na.omit(Reduce(f = merge.xts,return.listings.day))
-colnames(logret.daily)<-tickers
+CDaRBalanced@CDaR*60000
+barplot(round(CDaRBalanced@weights*100))
 
-logret.daily
-# or Monthly returns
-return.listings.month<-lapply(tickers,function(tick){
-  t = eval(as.symbol(tick))
-  monthlyReturn(t,type = "log")})
+MDBalanced <- FRAPO::PMD(Returns = logret.mthly, percentage = FALSE)
+barplot(round(MDBalanced@weights,2))
 
-logret.mthly <- na.omit(Reduce(f = merge.xts,return.listings.month))
-colnames(logret.mthly)<-tickers
+barplot(ERBalanced@weights,legend.text = ERBalanced@type)
 
-logret.mthly
+GMVBalanced<-FRAPO::PGMV(Returns = logret.mthly,percentage= FALSE)
+(GMVBalanced@weights)
+MTDBalanced<-FRAPO::PMTD(logret.mthly,percentage = FALSE)
+barplot(MTDBalanced@weights, legend.text = MTDBalanced@type)
+
+################################
+# Play with fPortfolio
+################################
+
+library(fPortfolio)
+plot.new()
+tp<-fPortfolio::tangencyPortfolio(data = prices.mthly)
+
+getWeights(tp)
+getRiskFreeRate(tp)
+
+barplot(tp@portfolio@portfolio$covRiskBudgets)
+barplot(tp@portfolio@portfolio$weights)
 
 
 
-prob.win <- function(logret){
-  s<-sign(logret)
-  COUNT_IFS(s,x==1)/NROW(logret)}
-
-wins<-as.matrix(lapply(return.listings.month,prob.win))
-kelly.weights<-as.matrix(lapply(wins, function(x){2*x-1}))    
-row.names(kelly.weights)<-tickers
-sort.k.w<-sort(x = kelly.weights,decreasing = TRUE)
-sum.k.w<-Filter(f = sum,x = kelly.weights)
-Reduce(kelly.weights[1:4,], f = sum)
+prices.mthly
